@@ -1,28 +1,28 @@
 # Milo Analytics — Smart Workload & Injury Prevention Dashboard
 
-> **AQX Sports Analytics Data Bowl 4.0 Submission**  
+> **AQX Sports Analytics Data Bowl 4.0 Submission**
 > *Preventing athletic injuries through science-backed workload analytics and dynamic decision support.*
 
 ---
 
-## Aperçu du Projet
+## Project overview
 
-Milo Analytics est une application web de surveillance de la charge d’entraînement basée sur le modèle **Session-RPE (Foster)** et le ratio **ACWR (Acute-to-Chronic Workload Ratio)**. Elle permet aux athlètes et entraîneurs d'anticiper le risque de blessure et d'ajuster dynamiquement les séances à venir.
+Milo Analytics is a web app that monitors training load with the **Session-RPE (Foster)** model and the **ACWR (Acute-to-Chronic Workload Ratio)**. It helps athletes and coaches anticipate injury risk and adjust the next session.
 
-L’idée est simple : un athlète se blesse souvent parce que la fatigue des derniers jours dépasse la condition construite sur plusieurs semaines. L’application transforme le carnet de séances en quatre lectures — charge aiguë, charge chronique, ACWR, niveau de risque — puis propose une séance pour le lendemain.
+The idea is simple: athletes often get injured when the fatigue of the last few days outruns the fitness built over several weeks. The app turns a training log into four readings — acute load, chronic load, ACWR, and risk level — then proposes a session for the next day.
 
 ```text
-Séances (durée × RPE)
+Sessions (duration × RPE)
         │
         ▼
-Charge quotidienne ──► moyenne 7 j  = charge aiguë ──┐
-        │                                             ├──► ACWR ──► zone ──► séance de demain
-        └──────────► moyenne 28 j = charge chronique ┘
+Daily load ──► 7-day mean  = acute load ──┐
+        │                                   ├──► ACWR ──► zone ──► tomorrow's session
+        └──────────► 28-day mean = chronic load ┘
 ```
 
-![Tableau de bord en surcharge : indicateurs, niveau Danger et récupération active](docs/tableau-de-bord.png)
+![Dashboard in overload: metrics, Danger level, and active recovery](docs/tableau-de-bord.png)
 
-*Course à pied, scénario « Surcharge récente », graine 42. L'ACWR du dernier jour est à 1,52. La séance du lendemain passe en récupération active.*
+*Running, “Recent overload” scenario, seed 42. The interface is in French. The last ACWR is 1.52, so the next session switches to active recovery.*
 
 ---
 
@@ -37,46 +37,46 @@ Milo’s legend is the earliest historical example of **progressive overload** a
 
 **Milo Analytics** brings this ancient wisdom into modern sports science—ensuring athletes build that capacity gradually and stay in the optimal zone (ACWR 0.8–1.3).
 
-### L'origine du nom
+### Where the name comes from
 
-Dans la Grèce antique, Milon de Crotone (VIᵉ siècle av. J.-C.) était le plus grand lutteur de l'histoire olympique, sacré 6 fois champion des Jeux Olympiques.
+In ancient Greece, Milo of Croton (6th century BC) was the greatest wrestler in Olympic history, crowned champion six times.
 
-La légende raconte que pour développer sa force, Milon utilisa une méthode simple : il commença par porter sur ses épaules un veau nouveau-né, chaque jour. Au fil des mois, le veau grandissait et prenait du poids. Le corps de Milon s'adapta si progressivement à cette augmentation qu'il finit par porter un taureau adulte sans se blesser.
+The legend says he built his strength in a simple way: every day he carried a newborn calf on his shoulders. Over the months the calf grew heavier, and Milo’s body adapted so gradually that he could eventually carry a full-grown bull without getting injured.
 
-Cette histoire est la première illustration connue de la surcharge progressive et de la gestion de la charge :
+This story is the earliest known picture of progressive overload and load management:
 
-* **Le veau** est la charge chronique. De petites hausses, répétées, construisent une condition capable de supporter lourd.
-* **Le taureau, dès le premier jour**, est le pic de charge aiguë. Un ACWR au-dessus de 1,5, et le corps lâche.
-* **La progression contrôlée** garde le ratio entre 0,8 et 1,3, dans la zone optimale.
+* **The calf** is chronic load. Small, repeated increases build a body that can carry more.
+* **The bull on day one** is an acute load spike. Above an ACWR of 1.5, the body gives way.
+* **Controlled progression** keeps the ratio between 0.8 and 1.3, inside the optimal zone.
 
 ---
 
-## Fondements Scientifiques
+## Scientific basis
 
-1. **Session-RPE (Foster) :**  
-   $$\text{Charge} = \text{Durée (min)} \times \text{RPE (Effort perçu 1-10)}$$
-2. **Acute-to-Chronic Workload Ratio (ACWR) :**  
-   $$\text{ACWR} = \frac{\text{Moyenne mobile sur 7 jours (Fatigue Aiguë)}}{\text{Moyenne mobile sur 28 jours (Condition Chronique)}}$$
-3. **Seuils de référence :** Basés sur les publications scientifiques de *Gabbett et al.* et *Hulin et al.* (2014-2016).
+1. **Session-RPE (Foster):**
+   $$\text{Load} = \text{Duration (min)} \times \text{RPE (perceived exertion 1–10)}$$
+2. **Acute-to-Chronic Workload Ratio (ACWR):**
+   $$\text{ACWR} = \frac{\text{7-day rolling mean (acute fatigue)}}{\text{28-day rolling mean (chronic fitness)}}$$
+3. **Reference thresholds:** Based on the work of *Gabbett et al.* and *Hulin et al.* (2014–2016).
 
-| ACWR | Zone | Lecture dans l'application |
+| ACWR | Zone | Reading in the app |
 | --- | --- | --- |
-| < 0,80 | Sous-entraînement | Attention — la condition baisse, un pic brutal serait risqué |
-| 0,80 – 1,30 | Zone optimale | Sécurité — charge et condition restent alignées |
-| 1,30 – 1,50 | Zone d'attention | La charge accélère : alléger avant le seuil rouge |
-| > 1,50 | Surcharge | Danger — zone associée, dans ces travaux, à un risque de blessure plus élevé |
+| < 0.80 | Undertraining | Caution — fitness is dropping, and a sudden spike would be risky |
+| 0.80 – 1.30 | Optimal zone | Safe — load and fitness stay aligned |
+| 1.30 – 1.50 | Caution zone | Load is accelerating: ease off before the red threshold |
+| > 1.50 | Overload | Danger — in these studies, a zone linked to a higher injury risk |
 
-La bande 1,30 – 1,50 est le tampon pratique entre la zone optimale, souvent citée jusqu’à 1,30, et le seuil de danger au-dessus de 1,50.
+The 1.30–1.50 band is the practical buffer between the optimal zone, often cited up to 1.30, and the danger threshold above 1.50.
 
-![Trajectoire de l'ACWR sur les quatre bandes de risque](docs/acwr.png)
+![ACWR trajectory across the four risk bands](docs/acwr.png)
 
-*Même scénario. La courbe quitte la zone optimale, traverse la bande d'attention, puis entre dans la zone de danger.*
+*Same scenario. The curve leaves the optimal zone, crosses the caution band, and enters the danger zone.*
 
-Le modèle implémenté est l’**ACWR couplé** : les 7 jours aigus sont inclus dans les 28 jours chroniques, comme dans la formulation historique par moyennes mobiles. Ce couplage tire mécaniquement le ratio vers 1. Les jours sans séance comptent à charge nulle, pour que les fenêtres soient des jours calendaires.
+The implemented model is the **coupled ACWR**: the 7 acute days sit inside the 28 chronic days, as in the original rolling-mean formula. That coupling pulls the ratio toward 1. Days without a session count as zero load, so the windows are calendar days.
 
-L’ACWR est un indicateur de surveillance. Ce n’est ni un diagnostic, ni une probabilité individuelle de blessure. Le RPE est subjectif. Le sommeil, le stress, la douleur et les antécédents ne sont pas dans le fichier.
+ACWR is a monitoring indicator. It is not a diagnosis, and it is not an individual probability of injury. RPE is subjective. Sleep, stress, pain, and injury history are not in the file.
 
-Références :
+References:
 
 - Foster C. et al. (2001). *A new approach to monitoring exercise training.* Journal of Strength and Conditioning Research.
 - Hulin B.T., Gabbett T.J. et al. (2014). *Spikes in acute workload are associated with increased injury risk in elite cricket fast bowlers.* British Journal of Sports Medicine.
@@ -86,77 +86,77 @@ Références :
 
 ---
 
-## Fonctionnalités Clés
+## Key features
 
-* **Import et génération de données :** support des fichiers CSV personnalisés, et générateur de données réalistes sur 60 jours.
-  * Sports : course à pied, football, cyclisme.
-  * Scénarios de démonstration : surcharge récente, zone optimale, reprise après relâche. Une graine aléatoire rend chaque jeu reproductible.
-  * CSV : séparateur virgule ou point-virgule, dates `AAAA-MM-JJ` ou `JJ/MM/AAAA`, décimales avec point ou virgule. Plusieurs séances le même jour sont additionnées. La charge du fichier est recalculée si elle ne vaut pas durée × RPE.
-* **Dashboard interactif :** visualisation des tendances de charge et des zones de risque avec Plotly.
-  * Quatre indicateurs : charge aiguë, charge chronique, dernier ACWR, niveau de risque.
-  * Courbe de la charge aiguë face à la charge chronique.
-  * Courbe d’ACWR sur quatre bandes : jaune (< 0,80), vert (0,80–1,30), orange (1,30–1,50), rouge (> 1,50).
-* **Prescription :** recommandation d'entraînement pour le lendemain selon le niveau de risque détecté.
-  * La séance vise un ratio cible : 1,25 au-dessus de 1,50, 1,15 entre 1,30 et 1,50, 1,05 dans la zone optimale, et au plus +0,10 sous 0,80.
-  * La charge du lendemain suit `L = 7 × ratio cible × chronique − somme des 6 derniers jours`.
-  * Si cette charge est négative ou négligeable, la consigne est une récupération active (25 min, RPE 3). Sinon, elle est traduite en durée et en RPE crédibles pour le sport.
-  * Le détail chiffré du calcul est affiché sous la recommandation. La règle est déterministe : ce n’est pas un modèle opaque.
+* **Import and data generation:** custom CSV files, plus a realistic 60-day generator.
+  * Sports: running, football, cycling.
+  * Demo scenarios: recent overload, optimal zone, return after a lull. A random seed makes each dataset reproducible.
+  * CSV: comma or semicolon separator, dates as `YYYY-MM-DD` or `DD/MM/YYYY`, decimals with a point or a comma. Several sessions on the same day are summed. The file’s load is recomputed when it does not equal duration × RPE.
+* **Interactive dashboard:** load trends and risk zones, drawn with Plotly.
+  * Four metrics: acute load, chronic load, latest ACWR, risk level.
+  * Acute load plotted against chronic load.
+  * ACWR curve on four bands: yellow (< 0.80), green (0.80–1.30), orange (1.30–1.50), red (> 1.50).
+* **Prescription:** a training recommendation for the next day, based on the detected risk level.
+  * The session targets a ratio of 1.25 above 1.50, 1.15 between 1.30 and 1.50, 1.05 inside the optimal zone, and at most +0.10 below 0.80.
+  * Tomorrow’s load follows `L = 7 × target ratio × chronic − sum of the last 6 days`.
+  * If that load is negative or negligible, the prescription is active recovery (25 min, RPE 3). Otherwise it is turned into a duration and an RPE that are credible for the sport.
+  * The figures behind the calculation are shown under the recommendation. The rule is deterministic: it is not a black-box model.
 
-![Charge aiguë et charge chronique sur 60 jours](docs/charges.png)
+![Acute and chronic load over 60 days](docs/charges.png)
 
-*Les barres sont la charge du jour. La courbe verte est la fatigue des 7 derniers jours, la courbe marine la condition des 28 derniers jours. Le bloc final fait monter l'aigu plus vite que le chronique.*
+*Bars are the daily load. The green curve is the fatigue of the last 7 days, and the navy curve is the fitness of the last 28 days. The final block lifts the acute load faster than the chronic load.*
 
-![Tableau de bord en zone optimale : ACWR 0,94 et entraînement normal](docs/zone-optimale.png)
+![Dashboard in the optimal zone: ACWR 0.94 and a normal training session](docs/zone-optimale.png)
 
-*Scénario « Zone optimale ». Le ratio reste dans la bande 0,80–1,30 et la séance proposée maintient la charge.*
+*“Optimal zone” scenario. The ratio stays inside the 0.80–1.30 band, and the proposed session maintains the load.*
 
-Un exemple, scénario « Surcharge récente » en course à pied (graine 42), est fourni dans [`data/exemple_course_surcharge.csv`](data/exemple_course_surcharge.csv).
+One example, the “Recent overload” running scenario (seed 42), is in [`data/exemple_course_surcharge.csv`](data/exemple_course_surcharge.csv).
 
-| Colonne | Obligatoire | Description |
+| Column | Required | Description |
 | --- | --- | --- |
-| `date` | oui | Jour de la séance |
-| `duree_min` | oui | Durée en minutes |
-| `rpe_effort_1_10` | oui | Effort perçu de 1 à 10 (0 seulement si la durée est nulle) |
-| `distance_km` | non | Volume affiché, non utilisé dans l'ACWR |
-| `charge_totale` | non | Recalculée à partir de la durée et du RPE |
+| `date` | yes | Session day |
+| `duree_min` | yes | Duration in minutes |
+| `rpe_effort_1_10` | yes | Perceived exertion from 1 to 10 (0 only when duration is zero) |
+| `distance_km` | no | Displayed volume, not used in the ACWR |
+| `charge_totale` | no | Recomputed from duration and RPE |
 
 ---
 
-## Installation et Lancement
+## Install and run
 
-Python 3.11 ou plus récent. Dépendances : `streamlit`, `pandas`, `numpy`, `plotly`.
+Python 3.11 or newer. Dependencies: `streamlit`, `pandas`, `numpy`, `plotly`.
 
 ```bash
-# 1. Cloner le dépôt
+# 1. Clone the repository
 git clone https://github.com/nouhaila-builds/Milo-Analytics.git
 cd Milo-Analytics
 
-# 2. Installer les dépendances
+# 2. Install the dependencies
 pip install -r requirements.txt
 
-# 3. Lancer l'application
+# 3. Start the app
 streamlit run app.py
 ```
 
-L’application s’ouvre sur `http://localhost:8501`.
+The app opens at `http://localhost:8501`.
 
-Sous Windows, si `streamlit` n’est pas reconnu :
+On Windows, if `streamlit` is not recognized:
 
 ```bash
 python -m pip install -r requirements.txt
 python -m streamlit run app.py
 ```
 
-### Déploiement Streamlit Community Cloud
+### Streamlit Community Cloud
 
-Le dépôt GitHub doit avoir `app.py` à la racine.
+The GitHub repository must have `app.py` at the root.
 
-- Main file : `app.py`
-- Requirements : `requirements.txt`
+- Main file: `app.py`
+- Requirements: `requirements.txt`
 
 ---
 
-## Structure du dépôt
+## Repository layout
 
 ```text
 milo-analytics/
@@ -176,14 +176,9 @@ milo-analytics/
     └── config.toml
 ```
 
-## Limites
+## Limitations
 
-- Les données synthétiques servent à la démonstration. Ce ne sont pas les séances d’un athlète réel.
-- L’outil aide à planifier. Il ne remplace pas un médecin, un kinésithérapeute ou un préparateur physique.
-- Les seuils sont des repères de groupe. Un athlète peut se blesser à 1,10 ou tolérer 1,40.
-- Cette version n’utilise pas la moyenne mobile exponentielle (EWMA), qui donne plus de poids aux jours récents à l’intérieur de chaque fenêtre.
-
-Markdown
-## Licence
-
-Projet distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
+- The synthetic data is for the demo. These are not a real athlete’s sessions.
+- The tool helps with planning. It does not replace a doctor, a physiotherapist, or a strength and conditioning coach.
+- The thresholds are group reference points. An athlete can get injured at 1.10 or tolerate 1.40.
+- This version does not use the exponentially weighted moving average (EWMA), which gives more weight to recent days inside each window.
