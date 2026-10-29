@@ -5,7 +5,7 @@
 
 ---
 
-## 🎯 Aperçu du Projet
+## Aperçu du Projet
 
 Milo Analytics est une application web de surveillance de la charge d’entraînement basée sur le modèle **Session-RPE (Foster)** et le ratio **ACWR (Acute-to-Chronic Workload Ratio)**. Elle permet aux athlètes et entraîneurs d'anticiper le risque de blessure et d'ajuster dynamiquement les séances à venir.
 
@@ -20,9 +20,13 @@ Charge quotidienne ──► moyenne 7 j  = charge aiguë ──┐
         └──────────► moyenne 28 j = charge chronique ┘
 ```
 
+![Tableau de bord en surcharge : indicateurs, niveau Danger et récupération active](docs/tableau-de-bord.png)
+
+*Course à pied, scénario « Surcharge récente », graine 42. L'ACWR du dernier jour est à 1,52. La séance du lendemain passe en récupération active.*
+
 ---
 
-## 🏛️ Why "Milo Analytics"?
+## Why "Milo Analytics"?
 
 Named after **Milo of Croton**, the legendary 6-time Ancient Olympic wrestling champion famous for carrying a growing calf every day until it became a full-grown bull.
 
@@ -47,13 +51,13 @@ Cette histoire est la première illustration connue de la surcharge progressive 
 
 ---
 
-## 🔬 Fondements Scientifiques
+## Fondements Scientifiques
 
 1. **Session-RPE (Foster) :**  
    $$\text{Charge} = \text{Durée (min)} \times \text{RPE (Effort perçu 1-10)}$$
 2. **Acute-to-Chronic Workload Ratio (ACWR) :**  
    $$\text{ACWR} = \frac{\text{Moyenne mobile sur 7 jours (Fatigue Aiguë)}}{\text{Moyenne mobile sur 28 jours (Condition Chronique)}}$$
-3. **Seuils de Référence :** Basés sur les publications scientifiques de *Gabbett et al.* et *Hulin et al.* (2014-2016).
+3. **Seuils de référence :** Basés sur les publications scientifiques de *Gabbett et al.* et *Hulin et al.* (2014-2016).
 
 | ACWR | Zone | Lecture dans l'application |
 | --- | --- | --- |
@@ -63,6 +67,10 @@ Cette histoire est la première illustration connue de la surcharge progressive 
 | > 1,50 | Surcharge | Danger — zone associée, dans ces travaux, à un risque de blessure plus élevé |
 
 La bande 1,30 – 1,50 est le tampon pratique entre la zone optimale, souvent citée jusqu’à 1,30, et le seuil de danger au-dessus de 1,50.
+
+![Trajectoire de l'ACWR sur les quatre bandes de risque](docs/acwr.png)
+
+*Même scénario. La courbe quitte la zone optimale, traverse la bande d'attention, puis entre dans la zone de danger.*
 
 Le modèle implémenté est l’**ACWR couplé** : les 7 jours aigus sont inclus dans les 28 jours chroniques, comme dans la formulation historique par moyennes mobiles. Ce couplage tire mécaniquement le ratio vers 1. Les jours sans séance comptent à charge nulle, pour que les fenêtres soient des jours calendaires.
 
@@ -78,21 +86,29 @@ Références :
 
 ---
 
-## 🚀 Fonctionnalités Clés
+## Fonctionnalités Clés
 
-* 📊 **Import & Génération de Données :** Support des fichiers CSV personnalisés + générateur de données réalistes sur 60 jours.
+* **Import et génération de données :** support des fichiers CSV personnalisés, et générateur de données réalistes sur 60 jours.
   * Sports : course à pied, football, cyclisme.
   * Scénarios de démonstration : surcharge récente, zone optimale, reprise après relâche. Une graine aléatoire rend chaque jeu reproductible.
   * CSV : séparateur virgule ou point-virgule, dates `AAAA-MM-JJ` ou `JJ/MM/AAAA`, décimales avec point ou virgule. Plusieurs séances le même jour sont additionnées. La charge du fichier est recalculée si elle ne vaut pas durée × RPE.
-* 📈 **Dashboard Interactif :** Visualisation des tendances de charge et des zones de risques avec Plotly.
+* **Dashboard interactif :** visualisation des tendances de charge et des zones de risque avec Plotly.
   * Quatre indicateurs : charge aiguë, charge chronique, dernier ACWR, niveau de risque.
   * Courbe de la charge aiguë face à la charge chronique.
   * Courbe d’ACWR sur quatre bandes : jaune (< 0,80), vert (0,80–1,30), orange (1,30–1,50), rouge (> 1,50).
-* 🤖 **Prescription Dynamic AI :** Recommandation d'entraînement automatisée pour le lendemain selon le niveau de risque détecté.
+* **Prescription :** recommandation d'entraînement pour le lendemain selon le niveau de risque détecté.
   * La séance vise un ratio cible : 1,25 au-dessus de 1,50, 1,15 entre 1,30 et 1,50, 1,05 dans la zone optimale, et au plus +0,10 sous 0,80.
   * La charge du lendemain suit `L = 7 × ratio cible × chronique − somme des 6 derniers jours`.
   * Si cette charge est négative ou négligeable, la consigne est une récupération active (25 min, RPE 3). Sinon, elle est traduite en durée et en RPE crédibles pour le sport.
   * Le détail chiffré du calcul est affiché sous la recommandation. La règle est déterministe : ce n’est pas un modèle opaque.
+
+![Charge aiguë et charge chronique sur 60 jours](docs/charges.png)
+
+*Les barres sont la charge du jour. La courbe verte est la fatigue des 7 derniers jours, la courbe marine la condition des 28 derniers jours. Le bloc final fait monter l'aigu plus vite que le chronique.*
+
+![Tableau de bord en zone optimale : ACWR 0,94 et entraînement normal](docs/zone-optimale.png)
+
+*Scénario « Zone optimale ». Le ratio reste dans la bande 0,80–1,30 et la séance proposée maintient la charge.*
 
 Un exemple, scénario « Surcharge récente » en course à pied (graine 42), est fourni dans [`data/exemple_course_surcharge.csv`](data/exemple_course_surcharge.csv).
 
@@ -106,14 +122,14 @@ Un exemple, scénario « Surcharge récente » en course à pied (graine 42), es
 
 ---
 
-## 🛠️ Installation & Lancement
+## Installation et Lancement
 
 Python 3.11 ou plus récent. Dépendances : `streamlit`, `pandas`, `numpy`, `plotly`.
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/votre-compte/milo-analytics.git
-cd milo-analytics
+git clone https://github.com/nouhaila-builds/Milo-Analytics.git
+cd Milo-Analytics
 
 # 2. Installer les dépendances
 pip install -r requirements.txt
@@ -140,20 +156,27 @@ Le dépôt GitHub doit avoir `app.py` à la racine.
 
 ---
 
-## 📁 Structure du dépôt
+## Structure du dépôt
 
 ```text
 milo-analytics/
 ├── app.py
 ├── requirements.txt
 ├── README.md
+├── logo.png
+├── logo.jpg
+├── docs/
+│   ├── tableau-de-bord.png
+│   ├── zone-optimale.png
+│   ├── charges.png
+│   └── acwr.png
 ├── data/
 │   └── exemple_course_surcharge.csv
 └── .streamlit/
     └── config.toml
 ```
 
-## ⚠️ Limites
+## Limites
 
 - Les données synthétiques servent à la démonstration. Ce ne sont pas les séances d’un athlète réel.
 - L’outil aide à planifier. Il ne remplace pas un médecin, un kinésithérapeute ou un préparateur physique.
