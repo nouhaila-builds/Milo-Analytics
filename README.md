@@ -22,7 +22,7 @@ Daily load ──► 7-day mean  = acute load ──┐
 
 ![Dashboard in overload: metrics, Danger level, and active recovery](docs/tableau-de-bord.png)
 
-*Running, “Recent overload” scenario, seed 42. The interface is in French. The last ACWR is 1.52, so the next session switches to active recovery.*
+*Running, “Recent overload” scenario, seed 42. The last ACWR is 1.52, so the next session switches to active recovery.*
 
 ---
 
@@ -91,7 +91,7 @@ References:
 * **Import and data generation:** custom CSV files, plus a realistic 60-day generator.
   * Sports: running, football, cycling.
   * Demo scenarios: recent overload, optimal zone, return after a lull. A random seed makes each dataset reproducible.
-  * CSV: comma or semicolon separator, dates as `YYYY-MM-DD` or `DD/MM/YYYY`, decimals with a point or a comma. Several sessions on the same day are summed. The file’s load is recomputed when it does not equal duration × RPE.
+  * CSV: comma or semicolon separator, dates as `YYYY-MM-DD` or `DD/MM/YYYY`, decimals with a point or a comma. Several sessions on the same day are summed. The file’s load is recomputed when it does not equal duration × RPE. French headers such as `duree_min` and `charge_totale` are still accepted.
 * **Interactive dashboard:** load trends and risk zones, drawn with Plotly.
   * Four metrics: acute load, chronic load, latest ACWR, risk level.
   * Acute load plotted against chronic load.
