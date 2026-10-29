@@ -182,3 +182,8 @@ milo-analytics/
 - L’outil aide à planifier. Il ne remplace pas un médecin, un kinésithérapeute ou un préparateur physique.
 - Les seuils sont des repères de groupe. Un athlète peut se blesser à 1,10 ou tolérer 1,40.
 - Cette version n’utilise pas la moyenne mobile exponentielle (EWMA), qui donne plus de poids aux jours récents à l’intérieur de chaque fenêtre.
+
+Markdown
+## Licence
+
+Projet distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
